@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,7 +20,7 @@ import java.util.Random;
 public class Tester {
 
     // Number of testcases to be generated and tested
-    private static final int CASECOUNT = 1;
+    private static final int CASECOUNT = 5;
 
     // Path of generated sourceCode
     private static final String sourceCodePath = "C:\\Users\\Smile\\Documents\\XinCheng\\TIC2003\\Tester\\sourceCode";
@@ -49,109 +52,61 @@ public class Tester {
         statements = new HashMap<>();
     }
 
-    public void generateSourceCode() {
-        // Procedure
-        String procedureName = getName();
-        sourceCode.add("procedure");
-        sourceCode.add(procedureName);
-        sourceCode.add("{");
-        procedures.add(procedureName);
+    public static String getSourcecodepath() {
+        return sourceCodePath;
+    }
+    public static String getQueriespath() {
+        return queriesPath;
+    }
+    public List<String> getSourceCode() {
+        return sourceCode;
+    }
+    public List<String> getQueries() {
+        return queries;
+    }
+    public List<String> getProcedures() {
+        return procedures;
+    }
+    public List<String> getVariables() {
+        return variables;
+    }
+    public List<String> getConstants() {
+        return constants;
+    }
+    public Map<Integer, String> getStatements() {
+        return statements;
+    }
 
-        // Statements
-        // Random number of stataments
-        int noOfStatment = 10;
-        // Statement types
-        List<String> stmtTypes = new ArrayList<>(Arrays.asList("read", "print", "assign"));
-        for (int i = 0; i < noOfStatment; i++) {
-            String stmtType = stmtTypes.get(random.nextInt(stmtTypes.size()));
-            if (stmtType.equals("read")) {
-                sourceCode.add("read");
-                String variableName = getName();
-                sourceCode.add(variableName);
-                sourceCode.add(";");
-                variables.add(variableName);
-            }
-            else if (stmtType.equals("print")) {
-                if (variables.isEmpty()) {
-                    i--;
-                    break;
-                }
-                sourceCode.add("print");
-                sourceCode.add(variables.get(random.nextInt(variables.size())));
-                sourceCode.add(";");
-            }
-            else if (stmtType.equals("assign")) {
-                getAssignStatement();
-            }
-            statements.put(i+1, stmtType);
+    public void writeSourceFile(int index) {
+        try {
+            FileWriter fw = new FileWriter(sourceCodePath + "/sourceCode" + index + ".txt");
+            StringBuilder sb = printSouceCode();
+            fw.write(sb.toString());
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        sourceCode.add("}");
     }
 
     public void generateQueries() {
 
     }
 
+    public static void clearFolder() {
+        for (File file : new File(sourceCodePath).listFiles()) {
+            if (file.isFile()) {
+                file.delete();
+            }
+        }
+    }
+
     public void test() {
 
     }
 
-    // A function to generate randomized procedure/variable name
-    // Name format: [a-zA-Z][a-zA-Z0-9]*
-    public String getName() {
-        int MAX_LENGTH = 50;
-        String alphbets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String digits = "0123456789";
-        String characters = alphbets + digits;
+    
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(alphbets.charAt(random.nextInt(alphbets.length())));
-        for (int i = 0; i < random.nextInt(MAX_LENGTH); i++) {
-            sb.append(characters.charAt(random.nextInt(characters.length())));
-        }
-
-        return sb.toString();
-    }
-
-    // A function to generate random integer
-    public Integer getConstant() {
-        return random.nextInt();
-    }
-
-    public void getAssignStatement() {
-        // LHS = RHS
-        // LHS: true - declared variable, false - new varible
-        // RHS: true - declared variable, false - constant
-        
-        boolean lhs = random.nextBoolean();
-        boolean rhs = random.nextBoolean();
-        String variableName1;
-        String variableName2;
-        if (lhs && !variables.isEmpty()) {
-            variableName1 = variables.get(random.nextInt(variables.size()));
-            sourceCode.add(variableName1);
-        }
-        else {
-            variableName1 = getName();
-            sourceCode.add(variableName1);
-        }
-        sourceCode.add("=");
-        if (rhs && !variables.isEmpty()) {
-            variableName2 = variables.get(random.nextInt(variables.size()));
-            if (variableName1.equals(variableName2)) {
-                sourceCode.add(getConstant().toString());
-            }
-            else {
-                sourceCode.add(variableName2);
-            }
-        }
-        else {
-            sourceCode.add(getConstant().toString());
-        }
-        sourceCode.add(";");
-    }
-
-    public void printSouceCode() {
+    public StringBuilder printSouceCode() {
         StringBuilder sb = new StringBuilder();
         for (String string : sourceCode) {
             if (string.equals("procedure")) {
@@ -170,22 +125,28 @@ public class Tester {
                 sb.append(string);
             }
         }
-        System.out.println(sb.toString());
+        return sb;
     }
 
     public static void main(String[] args) {
+        // Clear folders
+        clearFolder();
 
         for (int i = 0; i < CASECOUNT; i++) {
             // Init
             Tester tester = new Tester();
+            sourceCodeGenerator scGenerator = new sourceCodeGenerator(tester);
             // Generate source code
-            tester.generateSourceCode();
+            scGenerator.generateSourceCode();
+            // Write source code into file
+            tester.writeSourceFile(i+1);
             // Generate queries
             tester.generateQueries();
             // Execute and test
             tester.test();
 
-            tester.printSouceCode();
+            // Debug
+            //System.out.println(tester.printSouceCode().toString());
         }
     }
 }
