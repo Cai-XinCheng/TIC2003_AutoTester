@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class sourceCodeGenerator {
-
+public class SourceCodeGenerator {
     
     private Random random = new Random();
     // List to store all generated sourceCode
@@ -15,7 +14,7 @@ public class sourceCodeGenerator {
     private List<String> constants;
     private Map<Integer ,String> statements;
 
-    public sourceCodeGenerator(Tester tester) {
+    public SourceCodeGenerator(Tester tester) {
         sourceCode = tester.getSourceCode();
         procedures = tester.getProcedures();
         variables = tester.getVariables();

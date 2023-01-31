@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +30,6 @@ public class Tester {
     // Path of AutoTester.exe
     private static final String testerPath = "C:\\Users\\Smile\\Documents\\XinCheng\\TIC2003\\SPA\\Code\\Debug\\AutoTester.exe";
 
-    
-    private Random random = new Random();
     // List to store all generated sourceCode
     private List<String> sourceCode;
     // List to store all generated queries
@@ -88,10 +85,6 @@ public class Tester {
         }
     }
 
-    public void generateQueries() {
-
-    }
-
     public static void clearFolder() {
         for (File file : new File(sourceCodePath).listFiles()) {
             if (file.isFile()) {
@@ -135,13 +128,14 @@ public class Tester {
         for (int i = 0; i < CASECOUNT; i++) {
             // Init
             Tester tester = new Tester();
-            sourceCodeGenerator scGenerator = new sourceCodeGenerator(tester);
+            SourceCodeGenerator scGenerator = new SourceCodeGenerator(tester);
+            QueriesGenerator qGenerator = new QueriesGenerator(tester);
             // Generate source code
             scGenerator.generateSourceCode();
             // Write source code into file
             tester.writeSourceFile(i+1);
             // Generate queries
-            tester.generateQueries();
+            qGenerator.generateQueries();
             // Execute and test
             tester.test();
 
