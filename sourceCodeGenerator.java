@@ -25,9 +25,7 @@ public class SourceCodeGenerator {
     public void generateSourceCode() {
         // Procedure
         String procedureName = getName();
-        sourceCode.add("procedure");
-        sourceCode.add(procedureName);
-        sourceCode.add("{");
+        sourceCode.add("procedure " + procedureName + " {\n");
         procedures.add(procedureName);
 
         // Statements
@@ -38,10 +36,8 @@ public class SourceCodeGenerator {
         for (int i = 0; i < noOfStatment; i++) {
             String stmtType = stmtTypes.get(random.nextInt(stmtTypes.size()));
             if (stmtType.equals("read")) {
-                sourceCode.add("read");
                 String variableName = getName();
-                sourceCode.add(variableName);
-                sourceCode.add(";");
+                sourceCode.add("    read " + variableName + ";\n");
                 variables.add(variableName);
             }
             else if (stmtType.equals("print")) {
@@ -49,9 +45,7 @@ public class SourceCodeGenerator {
                     i--;
                     break;
                 }
-                sourceCode.add("print");
-                sourceCode.add(variables.get(random.nextInt(variables.size())));
-                sourceCode.add(";");
+                sourceCode.add("    print " + variables.get(random.nextInt(variables.size())) + ";\n");
             }
             else if (stmtType.equals("assign")) {
                 getAssignStatement();
@@ -93,32 +87,36 @@ public class SourceCodeGenerator {
         String variableName1;
         String variableName2;
         Integer constant;
+        StringBuilder sb = new StringBuilder();
+        sb.append("    ");
         if (lhs && !variables.isEmpty()) {
             variableName1 = variables.get(random.nextInt(variables.size()));
-            sourceCode.add(variableName1);
+            sb.append(variableName1);
         }
         else {
             variableName1 = getName();
-            sourceCode.add(variableName1);
+            sb.append(variableName1);
+            variables.add(variableName1);
         }
-        sourceCode.add("=");
+        sb.append(" = ");
         if (rhs && !variables.isEmpty()) {
             variableName2 = variables.get(random.nextInt(variables.size()));
             if (variableName1.equals(variableName2)) {
                 constant = getConstant();
-                sourceCode.add(constant.toString());
+                sb.append(constant.toString());
                 constants.add(constant.toString());
             }
             else {
-                sourceCode.add(variableName2);
+                sb.append(variableName2);
             }
         }
         else {
             constant = getConstant();
-            sourceCode.add(constant.toString());
+            sb.append(constant.toString());
             constants.add(constant.toString());
         }
-        sourceCode.add(";");
+        sb.append(";\n");
+        sourceCode.add(sb.toString());
     }
     
 }

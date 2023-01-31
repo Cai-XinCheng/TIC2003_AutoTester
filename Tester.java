@@ -19,7 +19,7 @@ import java.util.Random;
 public class Tester {
 
     // Number of testcases to be generated and tested
-    private static final int CASECOUNT = 5;
+    private static final int CASECOUNT = 1;
 
     // Path of generated sourceCode
     private static final String sourceCodePath = "C:\\Users\\Smile\\Documents\\XinCheng\\TIC2003\\Tester\\sourceCode";
@@ -77,7 +77,18 @@ public class Tester {
     public void writeSourceFile(int index) {
         try {
             FileWriter fw = new FileWriter(sourceCodePath + "/sourceCode" + index + ".txt");
-            StringBuilder sb = printSouceCode();
+            StringBuilder sb = print(sourceCode);
+            fw.write(sb.toString());
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeQueriesFile(int index) {
+        try {
+            FileWriter fw = new FileWriter(queriesPath + "/queries" + index + ".txt");
+            StringBuilder sb = print(queries);
             fw.write(sb.toString());
             fw.close();
         } catch (IOException e) {
@@ -91,6 +102,11 @@ public class Tester {
                 file.delete();
             }
         }
+        for (File file : new File(queriesPath).listFiles()) {
+            if (file.isFile()) {
+                file.delete();
+            }
+        }
     }
 
     public void test() {
@@ -99,24 +115,10 @@ public class Tester {
 
     
 
-    public StringBuilder printSouceCode() {
+    public StringBuilder print(List<String> list) {
         StringBuilder sb = new StringBuilder();
-        for (String string : sourceCode) {
-            if (string.equals("procedure")) {
-                sb.append(string);
-            }
-            else if (string.equals("{") || string.equals(";")) {
-                sb.append(string);
-                sb.append("\n    ");
-            }
-            else if (string.equals("}")) {
-                sb.delete(sb.length()-4, sb.length());
-                sb.append(string);
-            }
-            else {
-                sb.append(" ");
-                sb.append(string);
-            }
+        for (String string : list) {
+            sb.append(string);
         }
         return sb;
     }
@@ -136,11 +138,13 @@ public class Tester {
             tester.writeSourceFile(i+1);
             // Generate queries
             qGenerator.generateQueries();
+            tester.writeQueriesFile(i+1);
             // Execute and test
             tester.test();
 
             // Debug
-            //System.out.println(tester.printSouceCode().toString());
+            //System.out.println(tester.print(tester.sourceCode).toString());
+            //System.out.println(tester.print(tester.queries).toString());
         }
     }
 }
