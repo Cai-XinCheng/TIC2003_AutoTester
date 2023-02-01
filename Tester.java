@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /*
  * An auto tester for TIC2003 project (Iteration 1)
@@ -21,6 +20,7 @@ public class Tester {
     // Number of testcases to be generated and tested
     private static final int CASECOUNT = 1;
 
+    private static final String path = "C:\\Users\\Smile\\Documents\\XinCheng\\TIC2003\\Tester";
     // Path of generated sourceCode
     private static final String sourceCodePath = "C:\\Users\\Smile\\Documents\\XinCheng\\TIC2003\\Tester\\sourceCode";
     // Path of generated queries
@@ -38,6 +38,8 @@ public class Tester {
     private List<String> variables;
     private List<String> constants;
     private Map<Integer ,String> statements;
+
+    private Map<List<String>, String> fileNames;
     
     public Tester() {
         sourceCode = new ArrayList<>();
@@ -74,21 +76,14 @@ public class Tester {
         return statements;
     }
 
-    public void writeSourceFile(int index) {
+    public void writeFile(List<String> list, int index) {
+        fileNames = new HashMap<>();
+        fileNames.put(sourceCode, "/sourceCode");
+        fileNames.put(queries, "/queries");
+        
         try {
-            FileWriter fw = new FileWriter(sourceCodePath + "/sourceCode" + index + ".txt");
-            StringBuilder sb = print(sourceCode);
-            fw.write(sb.toString());
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeQueriesFile(int index) {
-        try {
-            FileWriter fw = new FileWriter(queriesPath + "/queries" + index + ".txt");
-            StringBuilder sb = print(queries);
+            FileWriter fw = new FileWriter(path + fileNames.get(list) + fileNames.get(list) + index + ".txt");
+            StringBuilder sb = print(list);
             fw.write(sb.toString());
             fw.close();
         } catch (IOException e) {
@@ -135,10 +130,11 @@ public class Tester {
             // Generate source code
             scGenerator.generateSourceCode();
             // Write source code into file
-            tester.writeSourceFile(i+1);
+            tester.writeFile(tester.sourceCode, i+1);
             // Generate queries
             qGenerator.generateQueries();
-            tester.writeQueriesFile(i+1);
+            // Write queries into file
+            tester.writeFile(tester.queries, i+1);
             // Execute and test
             tester.test();
 
