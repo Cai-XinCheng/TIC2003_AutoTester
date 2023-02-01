@@ -22,7 +22,7 @@ public class QueriesGenerator {
     }
     
     public void generateQueries() {
-        List<String> types = new ArrayList<>(Arrays.asList("procedure", "variable", "constant", "assign", "print", "read", "statement"));
+        List<String> types = new ArrayList<>(Arrays.asList("procedure", "variable", "constant", "assignment", "print", "read", "statement"));
         Map<String, List<String>> lists = new HashMap<>();
         lists.put("procedure", procedures);
         lists.put("variable", variables);
@@ -39,8 +39,8 @@ public class QueriesGenerator {
 
             // procedure p;
             String str = stmtType;
-            if (stmtType.equals("assign")) {
-                str = "assignment";
+            if (stmtType.equals("assignment")) {
+                str = "assign";
             }
             else if (stmtType.equals("statement")) {
                 str = "stmt";
@@ -64,7 +64,8 @@ public class QueriesGenerator {
                     }
                     break;
                 
-                case "assign":
+                case "assignment":
+                    stmtType = "assign";
                 case "print":
                 case "read":
                     for (java.util.Map.Entry<Integer, String> entry : statements.entrySet()) {

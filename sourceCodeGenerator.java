@@ -74,7 +74,7 @@ public class SourceCodeGenerator {
 
     // A function to generate random integer
     public Integer getConstant() {
-        return random.nextInt();
+        return random.nextInt(Integer.MAX_VALUE);
     }
 
     public void getAssignStatement() {
