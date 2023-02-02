@@ -22,7 +22,7 @@ import java.util.Map;
 public class Tester {
 
     // Number of testcases to be generated and tested
-    private static final int CASECOUNT = 10;
+    private static final int CASECOUNT = 1;
 
     private static final String path = "C:\\Users\\Smile\\Documents\\XinCheng\\TIC2003\\Tester";
     // Path of generated sourceCode

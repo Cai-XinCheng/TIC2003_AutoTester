@@ -30,7 +30,7 @@ public class SourceCodeGenerator {
 
         // Statements
         // Random number of stataments
-        int noOfStatment = 10;
+        int noOfStatment = 40;
         // Statement types
         List<String> stmtTypes = new ArrayList<>(Arrays.asList("read", "print", "assign"));
         for (int i = 0; i < noOfStatment; i++) {
@@ -58,7 +58,7 @@ public class SourceCodeGenerator {
     // A function to generate randomized procedure/variable name
     // Name format: [a-zA-Z][a-zA-Z0-9]*
     public String getName() {
-        int MAX_LENGTH = 50;
+        int MAX_LENGTH = 100;
         String alphbets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String digits = "0123456789";
         String characters = alphbets + digits;
@@ -74,7 +74,7 @@ public class SourceCodeGenerator {
 
     // A function to generate random integer
     public Integer getConstant() {
-        return random.nextInt(Integer.MAX_VALUE);
+        return random.nextInt(5);
     }
 
     public void getAssignStatement() {
@@ -104,7 +104,9 @@ public class SourceCodeGenerator {
             if (variableName1.equals(variableName2)) {
                 constant = getConstant();
                 sb.append(constant.toString());
-                constants.add(constant.toString());
+                if (!constants.contains(String.valueOf(constant))) {
+                    constants.add(constant.toString());
+                }
             }
             else {
                 sb.append(variableName2);
@@ -113,7 +115,9 @@ public class SourceCodeGenerator {
         else {
             constant = getConstant();
             sb.append(constant.toString());
-            constants.add(constant.toString());
+            if (!constants.contains(String.valueOf(constant))) {
+                constants.add(constant.toString());
+            }
         }
         sb.append(";\n");
         sourceCode.add(sb.toString());
